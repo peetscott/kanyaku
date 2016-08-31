@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" href="logo.svg" sizes="any" type="image/svg+xml"/>
+    <link rel="icon" href="logo32.png" sizes="32x32" type="image/png"/>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+
+    <script type="text/javascript" src="js/ime.js"></script>
+    <script type="text/javascript" src="js/jdict_init.js"></script>
+
+  </head>
+  <body>
+
+  <div id="header">
+    <div id="logo">
+      kanyaku
+    </div>
+    <div id="input_form">
+      <!-- TO DO: Set accesskey="i" -->
+      <form method="get" action="jdict">
+        <div id="ime" style="display: inline-block; margin-left: 10px;"></div>
+        <select id="select_input_type" name="kana">
+          <option value="hira"##
+#if (! $input_type || $input_type == "hira") selected="selected"#end##
+#*      *#> &#12354; </option> <!-- hiragana -A- 0x3042 -->
+          <option value="kata"##
+#if ($input_type == "kata") selected="selected"#end##
+#*      *#> &#12450; </option> <!-- katakana -A- 0x30a2 -->
+          <option value="roma"##
+#if ($input_type == "roma") selected="selected"#end##
+#*      *#> &#65313; </option> <!-- romaji   -A- 0xff21 -->
+          <option value="none"##
+#if ($input_type == "none") selected="selected"#end##
+#*      *#> A </option>
+        </select>
+
+        <select name="dict">
+#if ($dict_name == "kanjidic")##
+          <option value="kanjidic">kanjidic</option>
+          <option value="edict">edict</option>
+#else##
+          <option value="edict">edict</option>
+          <option value="kanjidic">kanjidic</option>
+#end##
+        </select>
+      </form>
+    </div>
+  </div>
+  <p>
+  #if ($ime_text)
+  Query string: $ime_text
+  #end
+  </p>
+
+  #if ($edict_reading_rows)
+  Number of records returned: $edict_reading_rows.size()
+    #edict_entry_tbl($edict_reading_rows)
+  #end
+
+  #if ($kanjidic_reading_rows)
+    #kanji_list_tbl($kanjidic_reading_rows $input_type)
+  #end
+
+  #if ($edict_phrase_rows)
+    #edict_entry_tbl($edict_phrase_rows)
+  #end
+
+  #if ($kanjidic_phrase_rows)
+    #kanjidic_entry_tbl($kanjidic_phrase_rows $input_type)
+  #end
+
+  #if ($kanjidic_radno_rows)
+    #if ($kanjidic_radical_row)  ## Could be null for several radicals that are not in kanjidic
+      #kanjidic_radical_tbl($kanjidic_radical_row)
+    #end
+    #kanji_list_tbl($kanjidic_radno_rows $input_type)
+  #end
+
+  #if ($kanjidic_strokes_rows)
+    #kanji_list_tbl($kanjidic_strokes_rows $input_type)
+  #end
+
+  #if ($kanjidic_grade_rows)
+    #kanji_list_tbl($kanjidic_grade_rows $input_type)
+  #end
+
+  #if ($kanjidic_skip_rows)
+    #kanji_list_tbl($kanjidic_skip_rows $input_type)
+  #end
+
+  #if ($kanjidic_keyword_rows)
+    #kanji_keyword_tbl($kanjidic_keyword_rows)
+  #end
+
+  #if ($edict_keyword_rows)
+    #edict_entry_tbl($edict_keyword_rows)
+  #end
+  </body>
+</html>

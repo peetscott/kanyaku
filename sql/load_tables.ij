@@ -1,0 +1,16 @@
+run 'kanji_entry.sql';
+run 'kun.sql';
+run 'ohn.sql';
+run 'radical.sql';
+run 'radical_name.sql';
+run 'name_reading.sql';
+run 'kanji_meaning.sql';
+run 'korean.sql';
+run 'pinyin.sql';
+run 'mis_classified.sql';
+run 'cross_ref.sql';
+run 'kanjidic_eidx.sql';
+run 'edict_entry.sql';
+run 'pidx.sql';
+run 'ridx.sql';
+exit;

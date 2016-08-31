@@ -1,0 +1,96 @@
+#header  {
+  background-color: #0094ec;
+  padding: 10px;
+}
+#logo  {
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 18pt;
+  color: white;
+  background-color: #0094ec;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-style: solid;
+  border-color: white;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+#input_form  {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+table  {
+  width: 100%;
+  border-collapse: separate;
+}
+
+th  {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  text-align: center;
+  background-color: #add8e6;  /* lightblue */
+}
+
+td  {
+  text-align: center;
+  padding: 5px;
+}
+
+td a  {
+  display: inline-block;
+}
+
+a  {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover  {
+  background-color: #add8e6;
+}
+
+.phs_cell, .rdng_cell, .gls_cell, .mngs_cell, .ohn_cell, .kun_cell, .comp_cell  {
+  text-align: left;
+}
+
+.phs_cell, .rdng_cell, .gls_cell  {
+  border-bottom: solid black 1px;
+}
+
+.kanji_cell  {
+  font-size: 48pt;
+  padding: 16pt;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.mngs_cell, .ohn_cell, .kun_cell  {
+  width: 25%;
+  padding-left: 8pt;
+}
+
+/*
+.col_grp  {
+  display: inline-block;
+  vertical-align: top;
+  border-style: solid;
+  border-width: 1px;
+}
+
+
+.col_hdr  {
+  text-align: center;
+  font-weight: bold;
+}
+
+.tbl_cell  {
+  text-align: center;
+  padding: 8pt;
+}
+*/

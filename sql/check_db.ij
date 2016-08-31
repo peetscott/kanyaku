@@ -1,0 +1,17 @@
+-- DO NOT DELETE THIS FILE. --
+SELECT COUNT(*) AS "kan.entry" FROM kanjidic.entry;
+SELECT COUNT(*) AS "kan.kun" FROM kanjidic.kun;
+SELECT COUNT(*) AS "kan.ohn" FROM kanjidic.ohn;
+SELECT COUNT(*) AS "kan.rad_nm" FROM kanjidic.radical_name;
+SELECT COUNT(*) AS "kan.rad" FROM kanjidic.radical;
+SELECT COUNT(*) AS "kan.nm_rd" FROM kanjidic.name_reading;
+SELECT COUNT(*) AS "kan.kor" FROM kanjidic.korean;
+SELECT COUNT(*) AS "kan.pin" FROM kanjidic.pinyin;
+SELECT COUNT(*) AS "kan.mis" FROM kanjidic.mis_classified;
+SELECT COUNT(*) AS "kan.cross" FROM kanjidic.cross_ref;
+SELECT COUNT(*) AS "kan.mean" FROM kanjidic.kanji_meaning;
+SELECT COUNT(*) AS "kan.eidx" FROM kanjidic.eidx;
+SELECT COUNT(*) AS "edict.entry" FROM edict.entry;
+SELECT COUNT(*) AS "edict.eidx" FROM edict.eidx;
+SELECT COUNT(*) AS "edict.pidx" FROM edict.pidx;
+SELECT COUNT(*) AS "edict.ridx" FROM edict.ridx;

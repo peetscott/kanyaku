@@ -1,0 +1,195 @@
+#macro(kanji_list_tbl $rows $input_type)
+    <table>
+      <tbody>
+        <tr>
+    #set ($col_no = 1)
+    #foreach ($row in $rows)
+          <td>
+            ## Some browsers seem to work without encoding. IE does not.
+            #set ($url_encoded = $URLEncoder.encode($row["kanji"], "UTF-8"))
+            <a href="jdict?ime_text=${url_encoded}&kana=$input_type&dict=kanjidic">
+            $row["kanji"]
+            </a>
+          </td>
+      #if ($col_no == 10)
+        </tr>
+        <tr>
+        #set ($col_no = 1)
+      #else
+        #set ($col_no = $col_no + 1)
+      #end
+    #end
+    #foreach ($i in [ $col_no .. 10 ])
+          <td>&#12288;</td>
+    #end
+        </tr>
+      </tbody>
+    </table>
+#end
+
+#macro(edict_entry_tbl $rows)
+  <table>
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: auto;"></colgroup>
+    <tbody>
+    <tr>
+      <th>Phrase</th><th>Reading</th><th>Glosses</th>
+    </tr>
+    #foreach ($row in $rows)
+    <tr>
+      <td class="phs_cell">$Format.edictPhraseHTML($row["phrase"])</td>
+      <td class="rdng_cell">$Format.edictReadingHTML($row["reading"])</td>
+      <td class="gls_cell">$Format.edictGlossHTML($row["gloss"])</td>
+
+    </tr>
+    #end
+    </tbody>
+  </table>
+#end
+
+#macro(kanjidic_entry_tbl $rows $input_type)
+  #foreach ($row in $rows)
+    <table>
+      <tbody>
+      <colgroup></colgroup>
+      <colgroup colspan="2"></colgroup>
+      <colgroup colspan="2"></colgroup>
+      <colgroup colspan="2"></colgroup>
+      <colgroup></colgroup>
+      <tr>
+        <td rowspan="6" class="kanji_cell" style="">
+          $row["kanji"]
+        </td>
+        <th>Radical</th>
+        <th>Grade</th>
+        <th>Strokes</th>
+        <th>Frequency</th>
+        <th>SKIP</th>
+        <th>Unicode</th>
+        <th>Compounds</th>
+      </tr>
+      <tr>
+        <td>
+          <a href="jdict?ime_text=r$row["bushu"]&kana=$input_type&dict=kanjidic">
+            $row["radical"]
+          </a>
+        </td>
+        <td>$row["grade"]</td>
+        <td>$row["strokes"]</td>
+        <td>$row["frequency"]</td>
+        <td>$row["skip"]</td>
+        <td>$row["unicode"]</td>
+        <td class="comp_cell" rowspan="5">
+        #set ($url_encoded = $URLEncoder.encode($row["kanji"], "UTF-8"))
+          <a href="jdict?ime_text=${url_encoded}&kana=$input_type&dict=edict">
+            $row["kanji"]
+          </a>&#12288;
+          <a href="jdict?ime_text=${url_encoded}_&kana=$input_type&dict=edict">
+            $row["kanji"]&#22231;
+          </a>&#12288;
+          <a href="jdict?ime_text=${url_encoded}%25&kana=$input_type&dict=edict">
+            $row["kanji"]&#12540;
+          </a>&#12288;
+          <br/>
+          <a href="jdict?ime_text=_${url_encoded}&kana=$input_type&dict=edict">
+            &#22231;$row["kanji"]
+          </a>&#12288;
+          <a href="jdict?ime_text=_${url_encoded}%25&kana=$input_type&dict=edict">
+            &#22231;$row["kanji"]&#12540;
+          </a>&#12288;
+          <a href="jdict?ime_text=__${url_encoded}&kana=$input_type&dict=edict">
+            &#22231;&#22231;$row["kanji"]
+          </a>&#12288;
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">Ohn Readings</th><th colspan="2">Kun Readings</th><th colspan="2">Meanings</th>
+      </tr>
+      <tr>
+        <td colspan="2" class="ohn_cell">$row["ohn_readings"]</td>
+        <td colspan="2" class="kun_cell">$row["kun_readings"]</td>
+        <td colspan="2" class="mngs_cell">$row["kanji_meanings"]</td>
+      </tr>
+      <tr>
+        <th colspan="2">Name Readings</th><th colspan="2">Pinyin</th><th colspan="2">Korean</th>
+      </tr>
+      <tr>
+        <td colspan="2" class="ohn_cell">$row["name_readings"]</td>
+        <td colspan="2" class="kun_cell">$row["pinyin"]</td>
+        <td colspan="2" class="mngs_cell">$row["korean"]</td>
+      </tr>
+    </tbody>
+    </table>
+  #end
+#end
+
+#macro (kanjidic_radical_tbl $row)
+    <table>
+      <tbody>
+        <tr>
+          <td class="kanji_cell" rowspan="4">$row["kanji"]</td>
+          <th>Name</th>
+          <th>Grade</th>
+          <th>Strokes</th>
+          <th>Frequency</th>
+          <th>SKIP</th>
+          <th>Unicode</th>
+        </tr>
+        <tr>
+          <td class="kun_cell">$row["radical_names"]</td>
+          <td>$row["grade"]</td>
+          <td>$row["strokes"]</td>
+          <td>$row["frequency"]</td>
+          <td>$row["skip"]</td>
+          <td>$row["unicode"]</td>
+        </tr>
+      <tr>
+        <th colspan="2">Ohn Readings</th><th colspan="2">Kun Readings</th><th colspan="2">Meanings</th>
+      </tr>
+      <tr>
+        <td colspan="2" class="ohn_cell">$row["ohn_readings"]</td>
+        <td colspan="2" class="kun_cell">$row["kun_readings"]</td>
+        <td colspan="2" class="mngs_cell">$row["kanji_meanings"]</td>
+      </tr>
+      </tbody>
+    </table>
+#end
+
+#macro (kanji_keyword_tbl $rows)
+    <table>
+      <tbody>
+        <tr>
+  #set ($col_no = 0)
+  #set ($meanings = [ "", "", "", "" ])  ## MUST define the size of the ArrayList.
+  #foreach ($row in $rows)
+          <td>
+            <a href="jdict?ime_text=$URLEncoder.encode($row["kanji"], "UTF-8")&kana=none&dict=kanjidic">$row["kanji"]</a>
+          </td>
+    #set ($meanings[$col_no] = $row["kanji_meanings"])
+    #if ($col_no == 3)
+        </tr>
+        <tr>
+      #foreach ($str in $meanings)
+          <td>$str</td>
+      #end
+        </tr>
+        <tr>
+      #set ($meanings = [ "", "", "", "" ])
+      #set ($col_no = 0)
+    #else
+      #set ($col_no = $col_no + 1)
+    #end
+  #end
+  #if ($col_no > 0)
+        </tr>
+        <tr>
+    #foreach ($str in $meanings)
+          <td>$str</td>
+    #end
+  #end
+        </tr>
+      </tbody>
+    </table>
+
+#end

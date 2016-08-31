@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="kanyaku" default="usage" basedir=".">
+
+
+  <property file="build.properties"/>
+
+  <!-- Set this if you want to put the the database in
+       another location. You will also have to change
+       the property derby_system_home in web.xml.       -->
+  <property name="derby_system_home" value="${basedir}"/>
+
+  <!-- compile_webapp needs this. The full path name of
+       the servlet API jar file. Find it in the servlet
+       container's lib directory.                       -->
+  <property name="servlet_api_jar" value=""/>
+
+
+  <path id="velocity_jars">
+    <pathelement location="lib/velocity-1.7.jar"/>
+    <pathelement location="lib/commons-lang-2.4.jar"/>
+    <pathelement location="lib/commons-collections-3.2.1.jar"/>
+  </path>
+
+  <path id="derby_jars">
+    <pathelement location="lib/derby.jar"/>
+    <pathelement location="lib/derbytools.jar"/>
+  </path>
+
+
+  <condition property="db_exists">
+    <available file="${derby_system_home}/jdict_db"/>
+  </condition>
+
+
+  <target name="create_db">
+    <fail if="${db_exists}" message="jdict_db in ${derby_system_home} already exists."/>
+    <java fork="true"
+          classname="org.apache.derby.tools.ij"
+          inputstring="exit;">
+      <sysproperty key="derby.system.home" value="${derby_system_home}"/>
+      <sysproperty
+        key="ij.connection.JDICT"
+        value="jdbc:derby:jdict_db;create=true;territory=ja_JP;collation=TERRITORY_BASED;"/>
+      <classpath>
+        <path refid="derby_jars"/>
+      </classpath>
+    </java>
+  </target>
+
+  <target name="drop_db">
+    <input message="Delete directory jdict_db in ${derby_system_home} and all its contents? [y|n] "
+           addproperty="question_drop"
+           defaultvalue="n"/>
+    <condition property="yes_drop_db">
+        <equals arg1="y" arg2="${question_drop}"/>
+    </condition>
+    <fail unless="${yes_drop_db}"
+          message="Aborted."/>
+    <fail unless="${db_exists}" message="jdict_db in ${derby_system_home} does not exist."/>
+    <delete dir="${derby_system_home}/jdict_db"/>
+  </target>
+
+  <target name="create_tables">
+    <java fork="true"
+          classname="org.apache.derby.tools.ij"
+          inputstring="run '${basedir}/sql/create_tables.sql'; exit;">
+      <sysproperty key="derby.system.home" value="${derby_system_home}"/>
+      <sysproperty key="ij.connection.JDICT" value="jdbc:derby:jdict_db"/>
+      <classpath>
+        <path refid="derby_jars"/>
+      </classpath>
+    </java>
+
+  </target>
+
+  <target name="load_tables" depends="compile_jdict">
+    <!-- Create the required sql files .. -->
+    <java fork="true"
+          classname="JDictPrepare"
+          classpath="java">
+      <sysproperty key="edict.input.dir" value="dic"/>
+      <sysproperty key="edict.output.dir" value="sql"/>
+      <sysproperty key="derby.system.home" value="${derby_system_home}"/>
+      <classpath>
+        <pathelement location="java"/>
+        <path refid="derby_jars"/>
+      </classpath>
+    </java>
+
+    <!-- Use derby's ij tool to load the tables .. -->
+
+    <java fork="true"
+          dir="sql"
+          classname="org.apache.derby.tools.ij">
+      <sysproperty key="derby.system.home" value="${derby_system_home}"/>
+      <sysproperty key="derby.ui.codeset" value="EUC-JP"/>
+      <sysproperty key="ij.connection.JDICT" value="jdbc:derby:jdict_db"/>
+      <arg value="load_tables.ij"/>
+      <classpath>
+        <path refid="derby_jars"/>
+      </classpath>
+    </java>
+
+  </target>
+
+  <target name="check_db">
+    <java fork="true"
+          dir="sql"
+          classname="org.apache.derby.tools.ij">
+      <sysproperty key="derby.system.home" value="${derby_system_home}"/>
+
+      <sysproperty key="ij.connection.JDICT" value="jdbc:derby:jdict_db"/>
+      <arg value="check_db.ij"/>
+      <classpath>
+        <path refid="derby_jars"/>
+      </classpath>
+    </java>
+  </target>
+
+  <target name="update">
+    <mkdir dir="dic"/>
+    <get src="http://ftp.monash.edu.au/pub/nihongo/edict2" dest="dic/edict2"/>
+    <get src="http://ftp.monash.edu.au/pub/nihongo/kanjidic" dest="dic/kanjidic"/>
+  </target>
+
+  <target name="compile" depends="compile_jdict, compile_webapp">
+
+  </target>
+
+  <target name="compile_jdict">
+    <javac srcdir="java"
+           destdir="java"
+           includeAntRuntime="false">
+
+    </javac>
+  </target>
+
+  <target name="compile_webapp" depends="prepare_webapp">
+
+    <javac srcdir="webapp/src"
+           destdir="webapp/build/WEB-INF/classes"
+           includeAntRuntime="false">
+
+      <classpath>
+        <pathelement location="${servlet_api_jar}"/>
+        <path refid="derby_jars"/>
+        <path refid="velocity_jars"/>
+      </classpath>
+
+      <compilerarg value="-Xlint:unchecked"/>
+      <compilerarg value="-Xlint:deprecation"/>
+    </javac>
+
+  </target>
+
+  <target name="prepare_webapp">
+    <mkdir dir="webapp/build/WEB-INF/classes"/>
+    <mkdir dir="webapp/build/WEB-INF/classes/templ"/>
+    <mkdir dir="webapp/build/WEB-INF/lib"/>
+
+    <!-- These libraries are required by the webapp .. -->
+    <copy todir="webapp/build/WEB-INF">
+      <fileset dir="${basedir}">
+        <include name="lib/*.jar"/>
+        <exclude name="lib/derbytools.jar"/>
+      </fileset>
+    </copy>
+
+    <!-- HTML, JavaScript, etc .. -->
+    <copy todir="webapp/build">
+      <fileset dir="webapp/web">
+        <include name="**/*"/>
+        <exclude name="**/*.bak"/>
+      </fileset>
+    </copy>
+
+    <!-- Velocity templates .. -->
+    <copy todir="webapp/build/WEB-INF/classes/templ">
+      <fileset dir="webapp/src/templ">
+        <include name="*.vm"/>
+        <exclude name="**/*.bak"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="make_war" depends="compile_webapp">
+    <war destfile="webapp/kanyaku.war"
+         basedir="webapp/build">
+    </war>
+  </target>
+
+  <target name="clean">
+    <delete>
+      <fileset dir="sql"
+               includes="*.sql"
+               excludes="create_tables.sql, radical.sql"/>
+      <fileset dir="java" includes="*.class"/>
+      <fileset dir="webapp/build"/>
+    </delete>
+    <!-- Delete the build directory -->
+  </target>
+
+  <target name="usage">
+    <echo>
+    update          Download the dictionary files.
+    create_db       Create the database directory.
+    drop_db         Delete the database directory.
+    create_tables   Create the database tables.
+    load_tables     Build the SQL files and load the tables.
+    compile_jdict   Compile the database utility classes.
+    compile_webapp  Compile the servlet classes.
+    make_war        Package the webapp in a war file.
+    </echo>
+  </target>
+</project>

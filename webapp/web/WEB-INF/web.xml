@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"
+  metadata-complete="true">
+
+    <description>
+    A Japanese-English dictionary.
+    </description>
+
+    <display-name>Kanyaku</display-name>
+
+    <context-param>
+      <param-name>derby_system_home</param-name>
+
+      <!-- Enter the path of the kanyaku installation directory here.
+           <param-value>C:/Users/Joe/Documents/kanyaku</param-value>
+                                                                      -->
+      <param-value>c:/users/jacob/documents/project/kanyaku</param-value>
+    </context-param>
+
+    <listener>
+      <listener-class>
+      DBConnection
+      </listener-class>
+    </listener>
+
+    <listener>
+      <listener-class>
+      InitVelocity
+      </listener-class>
+    </listener>
+
+    <filter>
+      <filter-name>vcfilter</filter-name>
+      <filter-class>VelocityContextFilter</filter-class>
+    </filter>
+
+    <filter>
+      <filter-name>readingfilter</filter-name>
+      <filter-class>ReadingFilter</filter-class>
+    </filter>
+
+    <filter>
+      <filter-name>phrasefilter</filter-name>
+      <filter-class>PhraseFilter</filter-class>
+    </filter>
+
+    <filter>
+      <filter-name>asciifilter</filter-name>
+      <filter-class>AsciiFilter</filter-class>
+    </filter>
+
+    <servlet>
+      <servlet-name>jdictservlet</servlet-name>
+      <servlet-class>JDictServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>jdictservlet</servlet-name>
+        <url-pattern>/jdict</url-pattern>
+    </servlet-mapping>
+
+    <filter-mapping>
+      <filter-name>vcfilter</filter-name>
+      <servlet-name>jdictservlet</servlet-name>
+    </filter-mapping>
+
+    <filter-mapping>
+      <filter-name>readingfilter</filter-name>
+      <servlet-name>jdictservlet</servlet-name>
+    </filter-mapping>
+
+    <filter-mapping>
+      <filter-name>phrasefilter</filter-name>
+      <servlet-name>jdictservlet</servlet-name>
+    </filter-mapping>
+
+    <filter-mapping>
+      <filter-name>asciifilter</filter-name>
+      <servlet-name>jdictservlet</servlet-name>
+    </filter-mapping>
+
+</web-app>

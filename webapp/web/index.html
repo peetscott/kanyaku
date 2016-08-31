@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>kanyaku</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" href="logo.svg" sizes="any" type="image/svg+xml"/>
+    <link rel="icon" href="logo32.png" sizes="32x32" type="image/png"/>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="logo">
+        kanyaku
+      </div>
+    </div>
+    <table style="width: auto;">
+      <th>
+        <a href="jdict">Dictionary</a>
+      </th>
+      <th>
+        <a href="#usage">Usage</a>
+      </th>
+
+      <th>
+        <a href="http://www.edrdg.org/jmdict/edict_doc.html">EDICT</a>
+      </th>
+      <th>
+        <a href="http://www.edrdg.org/kanjidic/kanjidic.html">KANJIDIC</a>
+      </th>
+    </table>
+    <p>
+    kanyaku is a simple user interface for the EDICT and KANJIDIC
+    Japanese-English dictionary files. You type in a keyword; it
+    returns related entries.
+    </p>
+
+    <h1 id="usage">Usage</h1>
+    <p>
+    kanyaku has a simplified input editor that is sufficient for most
+    common queries. Select the "character set" you want to use, and
+    it transliterates what you type in the input box. The four
+    options are
+    </p>
+    <p>
+    1. <i>hiragana</i>: &#12354;
+    </p>
+    <p>
+    2. <i>katakana</i>: &#12450;
+    </p>
+    <p>
+    3. <i>romaji</i>: &#65313;
+    </p>
+    <p>
+    4. ASCII: A
+    </p>
+    <p>
+    You can choose to search either EDICT or KANJIDIC.
+    </p>
+    <p>
+    When working with EDICT you will mostly be typing in a reading
+    in <i>kana</i>. But you can also copy and paste in a phrase, or
+    use your operating system's IME to input a phrase. kanyaku will
+    figure out if you are searching by phrase or reading. The editor
+    works as you would expect. The special case is inputting "small"
+    vowels. Use the prefix <tt>\k</tt>.
+    <pre><tt>chi\kea</tt>  -- >  &#12481;&#12455;&#12450;</pre>
+    If you know the Unicode value of a character you can use
+    <tt>\uxxxx</tt>.
+    <pre><tt>\u59dc</tt>  -- >  &#23004;</pre>
+    <div style="border: solid black 1px; margin: 15px;">
+      <div style="text-align: center; margin: 15px;">
+        <div>
+        The &#171;woman&#187; in the &#171;sheep&#187 skin boots is GINGER. And she's NOT UGLY.
+        </div>
+        <div style="text-align: right; margin-top: 8px;">
+        &#8212;Excerpt from <span style="font-family: sans-serif;">Kanji Digest</span>
+        </div>
+      </div>
+    </div>
+    Press <tt>enter</tt> to submit the query.
+    </p>
+    <p>
+    Double a consonant for &#12387;
+    <pre><tt>bukkka</tt>  -- >  &#12406;&#12387;&#12363;</pre>
+    Except
+    <pre><tt>nn</tt>  -- >  &#12435;</pre>
+    </p>
+    <p>
+    The <i>kanji</i> characters in the phrase column of the results
+    are linked to KANJIDIC, if you want to find out more about them.
+    Some of the glosses have phrases that are linked back to EDICT.
+    </p>
+    <p>
+    You can search KANJIDIC by <i>ohn</i> or <i>kun</i> reading,
+    radical, grade, stroke count, SKIP number and Unicode value. For
+    <i>ohn</i> readings use the <i>katakana</i> character set. For
+    <i>kun</i> readings use <i>hiragana</i>. KANJIDIC uses an ASCII
+    <tt>'.'</tt> to delimit <i>okurigana</i> in <i>kun</i> readings. The
+    editor transliterates <tt>.</tt> to &#12290;, but it will be
+    interpreted correctly.
+    <pre>&#12415;&#12290;&#12427;  -- >  &#30475;  . . .</pre>
+    For other search methods use the ASCII character set. Prefix the
+    radical number with <tt>r</tt> (e.g. <tt>r30</tt>), grade with
+    <tt>g</tt> (e.g. <tt>g6</tt>), stroke count with <tt>s</tt> (e.g.
+    <tt>s12</tt>), and Unicode value with <tt>u</tt>
+    (e.g. <tt>u8eca</tt>). SKIP numbers can be input as is
+    (e.g. <tt>2-4-6</tt>).
+    </p>
+    <p>
+    Type in an English keyword to do a kind of reverse lookup. It is
+    not the same as a real English-Japanese dictionary, but you can
+    usually find what you want.
+    </p>
+
+    <h1>Setup</h1>
+    <p>
+    Presumably, users of this software are more interested in Japanese
+    than computers. You should be aware that this is not a desktop
+    application that installs with the click of a button. This is a
+    web application that you access through your browser. Actually,
+    it is very similar to any website you would find on the Internet.
+    The difference is you are going to host the website on your own
+    computer. It works without an Internet connection. There are four
+    principal components to the application.
+    </p>
+    <pre><tt>
+   1    --------->    2   --------->    3    --------->    4
+Browser            Server            Servlet            Database
+        <---------        <---------         <---------
+    </tt></pre>
+    <p>
+    <b>1.</b> Your browser. You type in what you want to find in the
+    database. The browser sends the request to the server and
+    waits for a response (a web page).
+    </p>
+    <p>
+    <b>2.</b> A servlet container, or server (e.g. Tomcat, Jetty,
+    other ...). The servlet container is a Java program that runs in
+    the background on your computer. It waits for requests from your
+    browser. When a request comes in it decides which servlet (it
+    might know about several) is appropriate to the request and
+    passes the request along. It waits for a reply from the servlet.
+    </p>
+    <p>
+    <b>3.</b> The servlet. A mini Java program that builds web pages.
+    The servlet examines the request and responds accordingly. In
+    this case the servlet creates a new request, sends it to the
+    database engine (Derby) and waits for the reply. Whatever the
+    database sends back is formatted in HTML and given back to the
+    servlet container.
+    </p>
+    <p>
+    <b>4.</b> The database engine (Apache Derby). A Java program that
+    manages databases. The setup procedure reorganizes the EDICT and
+    KANJIDIC dictionaries and loads them into a database called
+    <tt>jdict_db</tt>. The purpose of the kanyaku web application is
+    to make working with this database simple. Instead of using the
+    language of databases, SQL, you only have to type a keyword into
+    the input box. The servlet knows how to talk to the database.
+    Whatever the database engine finds the servlet sends back to you
+    in a readable format.
+    </p>
+    <p>
+    Because the web application has several independent parts, the
+    setup procedure can be somewhat involved. This section assumes
+    you do not have any experience with Java. It attempts to walk you
+    throught the steps without being overly technical.
+    </p>
+    <p>
+    Before you begin you should verify that you have Java installed.
+    Open a command shell window and type
+    </p>
+    <p>
+    <tt>java -version</tt>
+    </p>
+    <p>
+    You should see a message similar to
+    </p>
+    <pre><tt>java version "1.8.0_05"
+Java(TM) SE Runtime Environment (build 1.8.0_05-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.5-b02, mixed-mode)</tt></pre>
+    <p>
+    If it appears that the command failed, you will have to install
+    the Java Runtime Environment (JRE). See
+    <a href="#about_java">About Java</a>.
+    </p>
+    <p>
+    Here is a summary of the steps you will take to setup the
+    application:
+    </p>
+    <ol>
+      <li>Get the kanyaku distribution.</li>
+      <li>Get Apache Ant (Optional).</li>
+      <li>Get a servlet container.</li>
+      <li>Get the dictionary files.</li>
+      <li>Compile the source code (Optional).</li>
+      <li>Create the database.</li>
+      <li>Prepare the database tables.</li>
+      <li>Load the database tables.</li>
+      <li>Deploy the webapp.</li>
+      <li>Start the server.</li>
+      <li>Set derby.system.home</li>
+    </ol>
+
+    <h2>Using Ant</h2>
+    <p>
+    Ant is a tool commonly used to automate Java development tasks.
+    It is not required here, but it can make things a little easier.
+    For example, you will be able to get the latest dictionary files
+    with the command
+    </p>
+    <tt>ant update</tt>
+    <p>
+    which downloads the files and puts them in the correct location.
+    </p>
+    <p>
+    Ant is a Java program. It reads instructions from a file,
+    <tt>build.xml</tt>, and executes them. You will not need to
+    understand how it works. Just make sure it is installed
+    correctly. The Ant manual tells you how to do so. Go to
+    <pre><tt><a href="http://ant.apache.org/index.html">http://ant.apache.org</a></tt></pre>
+    and find the binary distribution.
+    Download the archive and unpack it in a directory of your choice.
+    Read the "Installing Apache Ant" section of the manual
+    (<tt>ANT_HOME/manual/index.html</tt>). When you are done you
+    should be able to open a command shell window and type
+    <pre><tt>ant -version</tt></pre>
+    which will print something like
+    <pre><tt>Apache Ant(TM) version 1.9.3 compiled on December 23 2013</tt></pre>
+    </p>
+    <h2>The Servlet Container</h2>
+    <p>
+    A servlet container is a kind of web server that knows how to
+    work with Java servlets. One or more servlets can be put together
+    to build a web application. The servlet container can manage
+    several web applications simultaneously by giving each of them
+    a unique name/address. We are calling this application kanyaku,
+    but you could give it another name. To run the application you
+    will (1) copy it to a directory specified by the server, (2)
+    start the server, (3) type the URL into your browser's address
+    box. The URL for this very page will be something like
+    <pre><tt>http://localhost:8080/kanyaku</tt></pre>
+    </p>
+    <h3>Jetty</h3>
+    <p>
+    Jetty is a servlet container that is relatively easy to get
+    started with. It is powerful software, but you will only need to
+    know the basics to use the kanyaku web application. You can
+    download Jetty from
+    <pre><tt><a href="https://www.eclipse.org/jetty/download.html">https://www.eclipse.org/jetty/download.html</a></tt></pre>
+    You should read the first
+    two chapters of the manual and ensure that you can successfully
+    start the server. At its simplest you will be able to use the
+    command
+    <pre><tt>java -jar start.jar</tt></pre>
+    from the Jetty installation directory. Stop the server by typing
+    <pre><tt>CTRL-C</tt></pre>
+    In the default configuration web applications are placed in the
+    <tt>webapps</tt> directory under <tt>JETTY_HOME</tt>. It is
+    possible to put your web applications elsewhere. Read more about
+    the <tt>jetty.base</tt> Java system property in Chapter 9 of the
+    manual.
+    </p>
+    <h3>Apache Tomcat</h3>
+    <p>
+    Tomcat offers a Windows installer that will run the server as a
+    service. This allows the server to be started automatically.
+    There is a handy configuration tool to help with the startup
+    parameters. Other than that the basics are similar to Jetty. You
+    will put your application in the <tt>webapps</tt> directory,
+    start the server if necessary and use your browser to work with
+    the application(s). Read the first five chapters of the User
+    Guide and the file <tt>RUNNING.txt</tt> to find out how to start
+    the server manually. Tomcat also comes with a built-in manager
+    web application that you can use to deploy your application(s).
+    Go to
+<pre><tt><a href="http://tomcat.apache.org">http://tomcat.apache.org</a></tt></pre>
+    to learn more.
+    </p>
+    <h2>The Dictionaries</h2>
+    <p>
+    kanyaku depends on the
+    <a href="http://ftp.monash.edu.au/pub/nihongo/edict2">
+    EDICT
+    </a> and
+    <a href="http://ftp.monash.edu.au/pub/nihongo/kanjidic">
+    KANJIDIC
+    </a>
+    dictionary files. These are generously made available by
+    <a href="http://www.csse.monash.edu.au/~jwb/japanese.html">
+    Jim Breen
+    </a> at Monash University. Before you can build the database you
+    have to get these two files. If you are using Ant you can do so
+    with this command (after opening a command shell window and
+    navigating to the kanyaku installation directory)
+    <pre><tt>ant update</tt></pre>
+    Otherwise, create a new directory in the kanyaku installation
+    directory called <tt>dic</tt>.
+    </p>
+    Download the files from
+<pre><tt><a href="http://ftp.monash.edu.au/pub/nihongo/edict2">http://ftp.monash.edu.au/pub/nihongo/edict2</a></tt></pre>
+    and
+<pre><tt><a href="http://ftp.monash.edu.au/pub/nihongo/kanjidic">http://ftp.monash.edu.au/pub/nihongo/kanjidic</a></tt></pre>
+    Save them as plain text files in the <tt>dic</tt> directory with
+    the names <tt>edict2</tt> and <tt>kanjidic</tt> (without any file
+    extension). These files are EUC-JP encoded. Make sure not to
+    change the encoding along the way. To verify that they have not
+    been corrupted, open them in your browser and set the page
+    encoding to EUC-JP. If you see gibberish, something went wrong.
+    Once the database has been built these two files are no longer
+    required. You can keep them for reference. Or not.
+
+    <h2>Compile The Source Code</h2>
+    <p>
+    Unless you like to tinker with the code you do not need to bother
+    with this.
+    </p>
+    <p>
+    There are two separate sets of Java source. The database utility
+    files are in the <tt>java</tt> directory. The servlet files are
+    in <tt>webapp/src</tt>. Compile everything with the command
+    <pre><tt>ant compile</tt></pre>
+    Or compile them separately with
+    <pre><tt>ant compile_jdict</tt></pre>
+    and
+    <pre><tt>ant compile_webapp</tt></pre>
+    Before you compile the servlet you will have to locate the
+    servlet API library in your servlet container distribution.
+    It will probably be in a <tt>lib</tt> directory and have a name
+    like <tt>servlet-api.jar</tt>. To tell the build script the
+    location of the library create a file called
+    <tt>build.properties</tt> in the kanyaku installation directory
+    (if it does not already exist) and add this line to it
+    <pre><tt>servlet_api_jar=/path/to/servlet.jar</tt></pre>
+    where the path is the full path name of the servlet API jar file.
+    </p>
+    <p>
+    The servlet class files will end up in
+    <tt>webapp/build/WEB-INF/classes</tt>. The contents of the
+    <tt>webapp/build</tt> directory will have a standard uncompressed
+    web application structure. You could then install it by<br/>
+    1. Creating a directory called <tt>kanyaku</tt> in the
+    <tt>webapps</tt> directory of the server.<br/>
+    2. Copying the -contents- of <tt>webapp/build</tt> to
+    <tt>&lt;SERVER_HOME&gt;/webapps/kanyaku</tt>. (Do not copy the
+    directory, only its contents.)<br/>
+    The Tomcat manager can help you deploy the <tt>build</tt>
+    directory. With Jetty you will have to do it by hand.
+    </p>
+    <p>
+    The command
+    <pre><tt>ant make_war</tt></pre>
+    packages <tt>webapp/build</tt> into <tt>kanyaku.war</tt> (in
+    <tt>webapp</tt>) which can also be used to deploy the
+    application. There is no need to create a new directory. Just
+    copy <tt>kanyaku.war</tt> to
+    <tt>&lt;SERVER_HOME&gt;/webapps</tt>. Tomcat manager can do this
+    for you.
+    </p>
+
+    <h2>Create The Database</h2>
+    <p>
+    kanyaku stores the dictionaries in a Derby database. By default
+    the database will be called <tt>jdict_db</tt> and be located in
+    the kanyaku installation directory.
+    <pre><tt>ant create_db</tt></pre>
+    creates the database. If you are not using Ant use this command
+    <pre><tt>echo show tables; | java -cp lib/derbytools.jar;lib/derby.jar -Dderby.system.home=. -Dij.connection.JDICT_DB=jdbc:derby:jdict_db;create=true;territory=ja_JP;collation=TERRITORY_BASED org.apache.derby.tools.ij
+</tt></pre>
+    Derby does not have a <tt>DROP DATABASE</tt> SQL statement. If
+    something goes wrong and you want to start over, delete the
+    <tt>jdict_db</tt> directory and everything in it.
+    </p>
+
+    <h2>Prepare The Database Tables</h2>
+    <p>
+    If you are interested in the table definitions, they are in
+    <tt>sql/create_tables.sql</tt>. Execute the SQL script with the
+    command
+    <pre><tt>ant create_tables</tt></pre>
+    To run the script manually
+    <pre><tt>java -cp lib/derbytools.jar;lib/derby.jar -Dderby.system.home=. -Dij.connection.JDICT_DB=jdbc:derby:jdict_db  org.apache.derby.tools.ij sql/create_tables.sql</tt></pre>
+    If you are NOT using Ant execute the following command
+    <pre><tt>java -cp lib/derbytools.jar;lib/derby.jar;java -Dderby.system.home=. -Dedict.input.dir=dic -Dedict.output.dir=sql JDictPrepare
+</tt></pre>
+    This creates some additional SQL scripts and puts them in the
+    <tt>sql</tt> directory.
+    </p>
+
+    <h2>Load The Database Tables</h2>
+    <p>
+    OK. It is time to be patient. EDICT has 170,000+ entries and
+    KANJIDIC 6000+. Each of these spawns multiple SQL <tt>INSERT</tt>
+    statements that have to be executed one at a time. It takes a
+    while. You may want to grab a cup of coffee. Get the ball rolling
+    with
+    <pre><tt>ant load_tables</tt></pre>
+    or
+    <pre><tt>java -cp lib/derbytools.jar;lib/derby.jar -Dderby.system.home=. -Dij.connection.JDICT_DB=jdbc:derby:jdict_db org.apache.derby.tools.ij sql/load_tables.ij</tt></pre>
+    When that finishes you can try
+    <pre><tt>ant check_db</tt></pre>
+    to see that the tables have been populated. The number of rows
+    reported for each table should equal the number of
+    <tt>INSERT</tt> statements in its respective <tt>.sql</tt> file.
+    </p>
+    <p>
+    You are free to work with the database directly if you want. Find
+    the documentation for Derby at
+    <pre><tt><a href="http://db.apache.org/derby">http://db.apache.org/derby</a></tt></pre>
+    You will want to look at the table definitions to see how the
+    database is organized. Most of the multi-valued attributes have
+    their own tables.
+    </p>
+
+    <h2>Deploy The Application</h2>
+    <p>
+    Copy <tt>kanyaku.war</tt> in the <tt>webapp</tt> directory to the
+    <tt>webapps</tt> directory of your servlet container (or wherever
+    it directs you to put <tt>.war</tt> files).
+    </p>
+
+    <h2>Start The Server</h2>
+    <p>
+    The server's documentation will explain how to start the server
+    and what the default port number is. Assuming the port number is
+    8080 you will find this application at
+    <pre><tt><a href="http://localhost:8080/kanyaku">http://localhost:8080/kanyaku</a></tt></pre>
+    </p>
+
+    <h2>derby.system.home</h2>
+    <p>
+    The database engine depends on a Java system property called
+    <tt>derby.system.home</tt>. It is the full path to the directory
+    where Derby databases are located. The web application has to be
+    informed of where the kanyaku installation directory (the defualt
+    location of the database) is on your computer. To do this you will
+    edit the <tt>web.xml</tt> file.
+    </p>
+    <p>
+    If you have deployed <tt>kanyaku.war</tt> successfully the server
+    will have created a directory called <tt>kanyaku</tt> in its
+    <tt>webapps</tt> directory (or wherever the server keeps webapps).
+    Open the file <tt>kanyaku/WEB-INF/web.xml</tt> with your text
+    editor. Find the section that looks like
+<pre><tt>
+&lt;context-param&gt;
+  &lt;param-name&gt;derby_system_home&lt;/param-name&gt;
+  &lt;param-value&gt;&lt;/param-value&gt;
+&lt;/context-param&gt;
+</tt></pre>
+    Type the full path name of the kanyaku installation directory
+    between the <tt>param-value</tt> tags
+<pre><tt>
+&lt;context-param&gt;
+  &lt;param-name&gt;derby_system_home&lt;/param-name&gt;
+  &lt;param-value&gt;C:/path/to/kanyaku&lt;/param-value&gt;
+&lt;/context-param&gt;
+</tt></pre>
+    and save the file.
+    </p>
+    <p>
+    Restart the server for the new value to take effect.
+    </p>
+
+    <h2 id="about_java">About Java</h2>
+    "Java" refers to both a programming language and a computer
+    program. Programs written in the language are executed by
+    <tt>java</tt>, a part of the Java Runtime Environment (JRE).
+    The command
+    <pre><tt>java MyProgram</tt></pre>
+    starts the Java system and tells it to run <tt>MyProgram</tt>. 
+    If your computer does not already have the JRE installed you will
+    have to get it from
+    <pre><tt><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a></tt></pre>
+    Follow the installation instructions for your particular operating
+    system. If you want to write your own programs (or modify this one)
+    you need the Java Development Kit (JDK).
+  </body>
+</html>
