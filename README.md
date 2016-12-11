@@ -43,7 +43,7 @@ website, and the
 
     [kanjidic](http://ftp.monash.edu.au/pub/nihongo/kanjidic)
     -->
-    
+    <!--
     [edict2.gz](ftp://ftp.edrdg.org/pub/Nihongo/edict2.gz)
 
     [edict2](ftp://ftp.edrdg.org/pub/Nihongo/edict2)
@@ -51,6 +51,15 @@ website, and the
     [kanjidic.gz](ftp://ftp.edrdg.org/pub/Nihongo/kanjidic.gz)
 
     [kanjidic](ftp://ftp.edrdg.org/pub/Nihongo/kanjidic)
+    -->
+
+    [ftp://ftp.edrdg.org/pub/Nihongo/edict2.gz](ftp://ftp.edrdg.org/pub/Nihongo/edict2.gz)
+
+    [ftp://ftp.edrdg.org/pub/Nihongo/edict2](ftp://ftp.edrdg.org/pub/Nihongo/edict2)
+
+    [ftp://ftp.edrdg.org/pub/Nihongo/kanjidic.gz](ftp://ftp.edrdg.org/pub/Nihongo/kanjidic.gz)
+
+    [ftp://ftp.edrdg.org/pub/Nihongo/kanjidic](ftp://ftp.edrdg.org/pub/Nihongo/kanjidic)
 
     To read the files in your browser, remember to set the page encoding
     to EUC-JP.
