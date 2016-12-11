@@ -12,12 +12,17 @@ EDICT and KANJIDIC are both plain text files that you can read with
 any EUC-JP enabled text editor or web browser. kanyaku aims to make
 doing so a little easier and cleaner. To learn more about the dictionaries
 visit the
+<!--
 [EDICT home page](http://www.csse.monash.edu.au/~jwb/edict.html),
+-->
+[EDICT home page](http://www.edrdg.org/jmdict/edict_doc.html),
 the
 [Electronic Dictionary Research and Development Group](http://www.edrdg.org/)
 website, and the
+<!--
 [KANJIDIC home page](http://www.csse.monash.edu.au/~jwb/kanjidic.html).
-
+-->
+[KANJIDIC home page](http://www.edrdg.org/kanjidic/kanjidic.html)
 ##    System Requirements    ##
 
 1.  Both the database and the servlet require Java. If it is not already
@@ -28,7 +33,8 @@ website, and the
     have to download them yourself from the Monash University server. They
     are available in gzipped and uncompressed formats. (Note: The file name
     is edict2. The edict file is similar - but different.)
-
+    
+    <!--
     [edict2.gz](http://ftp.monash.edu.au/pub/nihongo/edict2.gz)
 
     [edict2](http://ftp.monash.edu.au/pub/nihongo/edict2)
@@ -36,14 +42,27 @@ website, and the
     [kanjidic.gz](http://ftp.monash.edu.au/pub/nihongo/kanjidic.gz)
 
     [kanjidic](http://ftp.monash.edu.au/pub/nihongo/kanjidic)
+    -->
+    
+    [edict2.gz](ftp://ftp.edrdg.org/pub/Nihongo/edict2.gz)
+
+    [edict2](ftp://ftp.edrdg.org/pub/Nihongo/edict2)
+
+    [kanjidic.gz](ftp://ftp.edrdg.org/pub/Nihongo/kanjidic.gz)
+
+    [kanjidic](ftp://ftp.edrdg.org/pub/Nihongo/kanjidic)
 
     To read the files in your browser, remember to set the page encoding
     to EUC-JP.
 
 3.  A servlet container to run the web application. Two options are
 
+    <!--
     [Jetty](http://download.eclipse.org/jetty)
-
+    -->
+    
+    [Jetty](https://www.eclipse.org/jetty/download.html)
+    
     and
 
     [Apache Tomcat](http://tomcat.apache.org)
