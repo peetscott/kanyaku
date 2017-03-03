@@ -27,10 +27,12 @@ website, and the
 
 1.  Both the database and the servlet require Java. If it is not already
     installed on your system you can obtain the Java Runtime Environment (JRE)
-    from the downloads section of the Oracle website.
+    from the downloads section of the 
+    [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+    website.
 
 2.  The dictionary files are not included with this distribution. You will
-    have to download them yourself from the Monash University server. They
+    have to download them yourself from the EDICT project website. They
     are available in gzipped and uncompressed formats. (Note: The file name
     is edict2. The edict file is similar - but different.)
     
